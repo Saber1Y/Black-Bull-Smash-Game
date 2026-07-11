@@ -14,6 +14,7 @@ let score = 0;
 let tokens = 0;
 let currentLevel = 1;
 let gameStarted = false;
+let bullLaunched = false;
 let levelBodies = [];
 let trailPoints = [];
 let comboCount = 0;
@@ -23,6 +24,7 @@ let slowMoActive = false;
 let slowMoTimer = null;
 let trajectoryPoints = [];
 let audioCtx = null;
+let levelCompleteTimeout = null;
 
 const MAX_PULL = 150;
 const LAUNCH_FORCE = 0.2;
@@ -305,6 +307,7 @@ function launchBull() {
     playSound('launch');
     Body.setVelocity(bull, { x: dx * LAUNCH_FORCE * 5, y: dy * LAUNCH_FORCE * 5 });
     bull.launched = true;
+    bullLaunched = true;
     trajectoryPoints = [];
 
     setTimeout(checkBullState, 2500);
@@ -321,7 +324,7 @@ function setupCollisions() {
                 (a.velocity ? a.velocity.y : 0) - (b.velocity ? b.velocity.y : 0)
             );
 
-            if (a.label === 'jeet' || b.label === 'jeet') {
+            if ((a.label === 'jeet' || b.label === 'jeet') && bullLaunched) {
                 const jeet = a.label === 'jeet' ? a : b;
                 if (speed > 1.5) {
                     destroyJeet(jeet, speed);
@@ -467,6 +470,7 @@ function triggerSlowMo(duration) {
 
 function createBull() {
     if (bull) Composite.remove(engine.world, bull);
+    bullLaunched = false;
     bull = Bodies.circle(slingPos.x, slingPos.y, 22, {
         density: 0.004,
         restitution: 0.5,
@@ -503,11 +507,13 @@ function checkBullState() {
 function checkLevelComplete() {
     const jeets = Composite.allBodies(engine.world).filter(b => b.label === 'jeet' && !b._destroyed);
     if (jeets.length === 0) {
-        setTimeout(showLevelComplete, 600);
+        clearTimeout(levelCompleteTimeout);
+        levelCompleteTimeout = setTimeout(showLevelComplete, 600);
     }
 }
 
 function clearLevel() {
+    clearTimeout(levelCompleteTimeout);
     for (const body of levelBodies) {
         if (Composite.get(engine.world, body.id, 'body')) {
             Composite.remove(engine.world, body);
