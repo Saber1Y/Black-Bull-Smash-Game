@@ -72,8 +72,8 @@ function updateSave(scoreVal, tokensVal, levelVal) {
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    slingPos.x = 150;
-    slingPos.y = canvas.height - GROUND_Y_OFFSET - 140;
+    slingPos.x = 220;
+    slingPos.y = canvas.height - GROUND_Y_OFFSET - 80;
 }
 resizeCanvas();
 window.addEventListener('resize', () => {
