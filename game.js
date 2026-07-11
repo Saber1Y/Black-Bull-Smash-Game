@@ -98,6 +98,7 @@ document.getElementById('download-card-btn').addEventListener('click', downloadS
 document.getElementById('tweet-card-btn').addEventListener('click', tweetShareCard);
 document.getElementById('close-share-btn').addEventListener('click', closeShareCard);
 document.getElementById('restart-btn').addEventListener('click', restartLevel);
+document.getElementById('home-btn').addEventListener('click', goHome);
 
 const scoreValue = document.getElementById('score-value');
 const tokensValue = document.getElementById('tokens-value');
@@ -773,6 +774,14 @@ function restartLevel() {
     createBull();
     createLevel(currentLevel);
     updateUI();
+}
+
+function goHome() {
+    gameStarted = false;
+    clearLevel();
+    hideAllScreens();
+    updateStartScreenStats();
+    startScreen.classList.add('active');
 }
 
 function showGameOver() {
