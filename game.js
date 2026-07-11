@@ -326,7 +326,9 @@ function setupCollisions() {
 
             if ((a.label === 'jeet' || b.label === 'jeet') && bullLaunched) {
                 const jeet = a.label === 'jeet' ? a : b;
-                if (speed > 1.5) {
+                const other = a.label === 'jeet' ? b : a;
+                const isBullHit = other.label === 'bull';
+                if (isBullHit && speed > 1.5) {
                     destroyJeet(jeet, speed);
                 } else if (speed > 0.5) {
                     playSound('hit');
