@@ -106,6 +106,7 @@ const scoreValue = document.getElementById('score-value');
 const tokensValue = document.getElementById('tokens-value');
 const bullsValue = document.getElementById('bulls-value');
 const levelValue = document.getElementById('level-value');
+const levelNameEl = document.getElementById('level-name');
 
 function initAudio() {
     if (!audioCtx) {
@@ -378,6 +379,7 @@ function destroyJeet(jeet, speed) {
         showComboText(comboCount, jeet.position.x, jeet.position.y);
     } else {
         playSound('destroy');
+        showChargeMessage(jeet.position.x, jeet.position.y);
     }
 
     createDestructionParticles(jeet.position.x, jeet.position.y, jeet.render.fillStyle || '#ff0066');
@@ -402,6 +404,23 @@ function collectToken(token) {
     createTokenParticles(token.position.x, token.position.y);
     Composite.remove(engine.world, token);
     updateUI();
+
+    const remaining = Composite.allBodies(engine.world).filter(b => b.label === 'token' && !b._collected).length;
+    if (remaining === 0) {
+        score += 500;
+        updateUI();
+        showAirdropBonus();
+    }
+}
+
+function showAirdropBonus() {
+    const div = document.createElement('div');
+    div.className = 'airdrop-text';
+    div.textContent = 'AIRDROP BONUS +500!';
+    div.style.left = '50%';
+    div.style.top = '50%';
+    document.getElementById('game-container').appendChild(div);
+    setTimeout(() => div.remove(), 1500);
 }
 
 function showComboText(combo, x, y) {
@@ -412,6 +431,23 @@ function showComboText(combo, x, y) {
     div.style.top = y + 'px';
     document.getElementById('game-container').appendChild(div);
     setTimeout(() => div.remove(), 1000);
+}
+
+const CHARGE_MESSAGES = [
+    'CHARGE!', 'LFG!', 'SENT!', 'FOR THE LOVE',
+    'JEETED!', 'CHARGE FORWARD', 'BULLISH', 'ANSEM WINS'
+];
+let chargeMsgIndex = 0;
+
+function showChargeMessage(x, y) {
+    const div = document.createElement('div');
+    div.className = 'charge-text';
+    div.textContent = CHARGE_MESSAGES[chargeMsgIndex % CHARGE_MESSAGES.length];
+    chargeMsgIndex++;
+    div.style.left = x + 'px';
+    div.style.top = (y - 30) + 'px';
+    document.getElementById('game-container').appendChild(div);
+    setTimeout(() => div.remove(), 1200);
 }
 
 function createDestructionParticles(x, y, color) {
@@ -572,7 +608,7 @@ function createToken(x, y) {
         isStatic: true,
         isSensor: true,
         label: 'token',
-        render: { fillStyle: '#ffff00', strokeStyle: '#ffcc00', lineWidth: 2 }
+        render: { fillStyle: '#00ff88', strokeStyle: '#00ff66', lineWidth: 2 }
     });
     Composite.add(engine.world, token);
     levelBodies.push(token);
@@ -742,6 +778,19 @@ const LEVELS = {
 function createLevel(level) {
     const builder = LEVELS[level] || LEVELS[1];
     builder();
+    updateLevelName(level);
+}
+
+const LEVEL_NAMES = {
+    1: 'PUMP.FUN JEETS',
+    2: 'PAPER HANDS FORTRESS',
+    3: 'JEET BUNKER',
+    4: 'BULLPEN BATTLE',
+    5: 'FINAL JEET STAND'
+};
+
+function updateLevelName(level) {
+    levelValue.textContent = currentLevel;
 }
 
 function startGame() {
@@ -825,6 +874,9 @@ function updateUI() {
     tokensValue.textContent = tokens;
     bullsValue.textContent = bullsRemaining;
     levelValue.textContent = currentLevel;
+    if (levelNameEl) {
+        levelNameEl.textContent = LEVEL_NAMES[currentLevel] || '';
+    }
 }
 
 function updateStartScreenStats() {
@@ -863,9 +915,9 @@ function generateShareCard(mode) {
     offscreen.height = H;
 
     const grad = sctx.createLinearGradient(0, 0, W, H);
-    grad.addColorStop(0, '#0a0520');
-    grad.addColorStop(0.5, '#150a30');
-    grad.addColorStop(1, '#0a0520');
+    grad.addColorStop(0, '#050510');
+    grad.addColorStop(0.5, '#0f0a20');
+    grad.addColorStop(1, '#050510');
     sctx.fillStyle = grad;
     sctx.fillRect(0, 0, W, H);
 
@@ -879,28 +931,38 @@ function generateShareCard(mode) {
         sctx.fill();
     }
 
-    sctx.strokeStyle = '#ff00ff33';
+    sctx.strokeStyle = '#9945FF33';
     sctx.lineWidth = 2;
     sctx.strokeRect(15, 15, W - 30, H - 30);
 
     sctx.strokeStyle = '#00ff8833';
     sctx.strokeRect(20, 20, W - 40, H - 40);
 
+    sctx.strokeStyle = '#9945FF22';
+    sctx.lineWidth = 1.5;
+    sctx.beginPath();
+    for (let x = 0; x < W; x += 3) {
+        const y = H - 40 - Math.sin(x * 0.015 + Date.now() * 0.001) * 15 - Math.sin(x * 0.04) * 8;
+        if (x === 0) sctx.moveTo(x, y);
+        else sctx.lineTo(x, y);
+    }
+    sctx.stroke();
+
     sctx.font = 'bold 42px Courier New';
     sctx.textAlign = 'center';
-    sctx.fillStyle = '#ff00ff';
-    sctx.shadowColor = '#ff00ff';
+    sctx.fillStyle = '#00ff88';
+    sctx.shadowColor = '#9945FF';
     sctx.shadowBlur = 20;
     sctx.fillText('BLACK BULL SMASH', W / 2, 70);
     sctx.shadowBlur = 0;
 
     sctx.font = '14px Courier New';
-    sctx.fillStyle = '#00ff88';
-    sctx.fillText(mode === 'gameover' ? 'GAME OVER' : 'LEVEL COMPLETE', W / 2, 100);
+    sctx.fillStyle = '#9945FF';
+    sctx.fillText(mode === 'gameover' ? 'JEETED!' : 'SENT!', W / 2, 100);
 
     sctx.font = 'bold 72px Courier New';
     sctx.fillStyle = '#ffffff';
-    sctx.shadowColor = '#ff00ff';
+    sctx.shadowColor = '#9945FF';
     sctx.shadowBlur = 30;
     sctx.fillText(score.toLocaleString(), W / 2, 190);
     sctx.shadowBlur = 0;
@@ -940,7 +1002,7 @@ function generateShareCard(mode) {
 
     sctx.font = '12px Courier New';
     sctx.fillStyle = '#666';
-    sctx.fillText('trybullrush.xyz  |  #BlackBullSmash  #ANSEM', W / 2, 360);
+    sctx.fillText('CHARGE FORWARD NO MATTER WHAT  |  #BlackBullSmash  #ANSEM', W / 2, 360);
 
     sctx.fillStyle = '#ff00ff44';
     for (let i = 0; i < 5; i++) {
@@ -1038,6 +1100,8 @@ function drawBackground() {
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    drawPriceChart();
+
     ctx.fillStyle = '#0d0825';
     for (let i = 0; i < 8; i++) {
         const x = (i * canvas.width / 6) - 50;
@@ -1076,6 +1140,43 @@ function drawBackground() {
         ctx.fillStyle = '#00ff8822';
         ctx.fillRect(i, gy + 5, 1, 8);
     }
+}
+
+function drawPriceChart() {
+    const time = Date.now() * 0.0003;
+    const chartY = 60;
+    const chartH = canvas.height * 0.6;
+    const chartW = canvas.width;
+
+    ctx.strokeStyle = 'rgba(153, 69, 255, 0.12)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    for (let x = 0; x < chartW; x += 3) {
+        const noise1 = Math.sin(x * 0.01 + time) * 40;
+        const noise2 = Math.sin(x * 0.025 + time * 1.3) * 25;
+        const noise3 = Math.sin(x * 0.005 + time * 0.7) * 60;
+        const drift = Math.sin(x * 0.002 + time * 0.3) * 30;
+        const y = chartY + chartH / 2 + noise1 + noise2 + noise3 + drift;
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    ctx.strokeStyle = 'rgba(0, 255, 136, 0.06)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i < 5; i++) {
+        const lineY = chartY + (chartH / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(0, lineY);
+        ctx.lineTo(chartW, lineY);
+        ctx.stroke();
+    }
+
+    ctx.font = '10px Courier New';
+    ctx.fillStyle = 'rgba(153, 69, 255, 0.2)';
+    ctx.textAlign = 'right';
+    const price = (0.05 + Math.sin(time) * 0.02 + Math.sin(time * 2.3) * 0.01).toFixed(4);
+    ctx.fillText('$ANSEM: $' + price, chartW - 20, chartY + 15);
 }
 
 function drawSlingBase() {
@@ -1336,21 +1437,21 @@ function drawTokens() {
         const y = tok.position.y + Math.sin(time + x * 0.01) * 4;
         const r = 10;
 
-        ctx.fillStyle = '#ffcc00';
+        ctx.fillStyle = '#00ff88';
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2);
         ctx.fill();
-        ctx.strokeStyle = '#ff9900';
+        ctx.strokeStyle = '#00cc66';
         ctx.lineWidth = 2;
         ctx.stroke();
 
         ctx.fillStyle = '#fff';
-        ctx.font = 'bold 10px Courier New';
+        ctx.font = 'bold 9px Courier New';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('$', x, y + 1);
+        ctx.fillText('SOL', x, y + 1);
 
-        ctx.fillStyle = `rgba(255, 204, 0, ${0.2 + Math.sin(time * 2) * 0.1})`;
+        ctx.fillStyle = `rgba(0, 255, 136, ${0.2 + Math.sin(time * 2) * 0.1})`;
         ctx.beginPath();
         ctx.arc(x, y, r + 6, 0, Math.PI * 2);
         ctx.fill();

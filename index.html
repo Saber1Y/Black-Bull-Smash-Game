@@ -39,6 +39,7 @@
                 <div id="level-display">
                     <span class="level-label">LEVEL</span>
                     <span id="level-value">1</span>
+                    <span id="level-name" class="level-name"></span>
                 </div>
                 <button id="restart-btn" class="restart-btn" title="Restart Level">&#x21bb;</button>
                 <button id="home-btn" class="restart-btn" title="Home">&#x23f0;</button>
@@ -47,7 +48,8 @@
         
         <div id="start-screen" class="screen active">
             <h1>BLACK BULL<br>SMASH</h1>
-            <p>Launch the bull. Destroy all jeets. Collect $ANSEM.</p>
+            <p class="tagline">CHARGE FORWARD NO MATTER WHAT</p>
+            <p>Destroy jeets. Collect $ANSEM. Join the army.</p>
             <div class="game-legend">
                 <div class="legend-item">
                     <span class="legend-dot" style="background:#ff0066"></span>
@@ -55,11 +57,15 @@
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot" style="background:#ff3300"></span>
-                    <span>Snipers - tough jeets</span>
+                    <span>Paper hands - tough jeets</span>
                 </div>
                 <div class="legend-item">
                     <span class="legend-dot" style="background:#ffcc00"></span>
-                    <span>$ANSEM tokens - bonus points</span>
+                    <span>$ANSEM tokens - collect all</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot" style="background:#9945FF"></span>
+                    <span>SOL bonus - chain bonus</span>
                 </div>
             </div>
             <button id="start-btn" class="neon-btn">START SMASHING</button>
@@ -84,6 +90,7 @@
             <div id="high-score-banner" class="hidden">
                 <span>NEW HIGH SCORE!</span>
             </div>
+            <p class="tagline" style="margin-bottom: 20px;">CHARGE FORWARD NO MATTER WHAT</p>
             <div class="game-over-btns">
                 <button id="retry-btn" class="neon-btn">SMASH AGAIN</button>
                 <button id="share-btn" class="neon-btn secondary">SHARE SCORE</button>
@@ -91,7 +98,8 @@
         </div>
         
         <div id="level-complete-screen" class="screen">
-            <h2>LEVEL COMPLETE!</h2>
+            <h2>SENT!</h2>
+            <p class="tagline" style="color: #00ff88; margin-bottom: 15px;">JEETS CLEARED</p>
             <div class="final-stats">
                 <div class="stat">
                     <span class="stat-label">LEVEL SCORE</span>
@@ -99,7 +107,7 @@
                 </div>
             </div>
             <div class="game-over-btns">
-                <button id="next-level-btn" class="neon-btn">NEXT LEVEL</button>
+                <button id="next-level-btn" class="neon-btn">CHARGE FORWARD</button>
                 <button id="level-share-btn" class="neon-btn secondary">SHARE</button>
             </div>
         </div>

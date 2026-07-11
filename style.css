@@ -132,6 +132,13 @@ body {
     text-shadow: 0 0 15px #ffff0088;
 }
 
+.level-name {
+    font-size: 8px;
+    color: #9945FF;
+    letter-spacing: 1px;
+    text-shadow: 0 0 6px #9945FF66;
+}
+
 .screen {
     position: absolute;
     top: 0;
@@ -191,10 +198,19 @@ body {
 .screen p {
     font-size: 15px;
     color: #888;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     text-align: center;
     line-height: 1.6;
     animation: slideUp 0.5s ease;
+}
+
+.screen p.tagline {
+    font-size: 13px;
+    color: #9945FF;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    text-shadow: 0 0 15px #9945FF66;
 }
 
 .neon-btn {
@@ -342,6 +358,66 @@ body {
     100% {
         opacity: 0;
         transform: translate(-50%, -150%) scale(0.8);
+    }
+}
+
+.charge-text {
+    position: absolute;
+    font-size: 16px;
+    font-weight: bold;
+    color: #00ff88;
+    text-shadow: 0 0 15px #00ff8888, 0 0 30px #9945FF66;
+    pointer-events: none;
+    z-index: 50;
+    animation: chargeFloat 1.2s ease-out forwards;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    letter-spacing: 2px;
+}
+
+@keyframes chargeFloat {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    20% {
+        transform: translate(-50%, -70%) scale(1.1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -120%) scale(0.6);
+    }
+}
+
+.airdrop-text {
+    position: absolute;
+    font-size: 24px;
+    font-weight: bold;
+    color: #9945FF;
+    text-shadow: 0 0 20px #9945FF88, 0 0 40px #9945FF44;
+    pointer-events: none;
+    z-index: 60;
+    animation: airdropPop 1.5s ease-out forwards;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    letter-spacing: 3px;
+}
+
+@keyframes airdropPop {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.3);
+    }
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.3);
+    }
+    40% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -80%) scale(0.8);
     }
 }
 
