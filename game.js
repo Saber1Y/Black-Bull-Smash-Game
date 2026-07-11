@@ -73,7 +73,7 @@ function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     slingPos.x = 150;
-    slingPos.y = canvas.height - GROUND_Y_OFFSET - 80;
+    slingPos.y = canvas.height - GROUND_Y_OFFSET - 140;
 }
 resizeCanvas();
 window.addEventListener('resize', () => {
