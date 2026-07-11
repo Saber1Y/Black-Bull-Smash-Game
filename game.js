@@ -28,6 +28,47 @@ const MAX_PULL = 120;
 const LAUNCH_FORCE = 0.12;
 const GROUND_Y_OFFSET = 60;
 
+const STORAGE_KEY = 'blackbullsmash';
+let saveData = loadSave();
+
+function getDefaultSave() {
+    return {
+        highScore: 0,
+        totalTokens: 0,
+        maxLevel: 1,
+        gamesPlayed: 0
+    };
+}
+
+function loadSave() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+            const data = JSON.parse(raw);
+            return { ...getDefaultSave(), ...data };
+        }
+    } catch (e) {}
+    return getDefaultSave();
+}
+
+function writeSave() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(saveData));
+    } catch (e) {}
+}
+
+function updateSave(scoreVal, tokensVal, levelVal) {
+    saveData.gamesPlayed++;
+    saveData.totalTokens += tokensVal;
+    if (scoreVal > saveData.highScore) {
+        saveData.highScore = scoreVal;
+    }
+    if (levelVal > saveData.maxLevel) {
+        saveData.maxLevel = levelVal;
+    }
+    writeSave();
+}
+
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -45,11 +86,17 @@ window.addEventListener('resize', () => {
 const startScreen = document.getElementById('start-screen');
 const gameOverScreen = document.getElementById('game-over-screen');
 const levelCompleteScreen = document.getElementById('level-complete-screen');
+const shareCardModal = document.getElementById('share-card-modal');
+const highScoreBanner = document.getElementById('high-score-banner');
 
 document.getElementById('start-btn').addEventListener('click', startGame);
 document.getElementById('retry-btn').addEventListener('click', startGame);
-document.getElementById('share-btn').addEventListener('click', shareScore);
+document.getElementById('share-btn').addEventListener('click', () => openShareCard('gameover'));
 document.getElementById('next-level-btn').addEventListener('click', nextLevel);
+document.getElementById('level-share-btn').addEventListener('click', () => openShareCard('level'));
+document.getElementById('download-card-btn').addEventListener('click', downloadShareCard);
+document.getElementById('tweet-card-btn').addEventListener('click', tweetShareCard);
+document.getElementById('close-share-btn').addEventListener('click', closeShareCard);
 
 const scoreValue = document.getElementById('score-value');
 const tokensValue = document.getElementById('tokens-value');
@@ -702,14 +749,22 @@ function nextLevel() {
 
 function showGameOver() {
     gameStarted = false;
-    document.getElementById('final-score').textContent = score;
+    updateSave(score, tokens, currentLevel);
+    const isNewHigh = score >= saveData.highScore;
+    document.getElementById('final-score').textContent = score.toLocaleString();
     document.getElementById('final-tokens').textContent = tokens;
+    if (isNewHigh && score > 0) {
+        highScoreBanner.classList.remove('hidden');
+    } else {
+        highScoreBanner.classList.add('hidden');
+    }
     gameOverScreen.classList.add('active');
 }
 
 function showLevelComplete() {
     gameStarted = false;
-    document.getElementById('level-score').textContent = score;
+    updateSave(score, tokens, currentLevel);
+    document.getElementById('level-score').textContent = score.toLocaleString();
     levelCompleteScreen.classList.add('active');
 }
 
@@ -717,6 +772,7 @@ function hideAllScreens() {
     startScreen.classList.remove('active');
     gameOverScreen.classList.remove('active');
     levelCompleteScreen.classList.remove('active');
+    shareCardModal.classList.remove('active');
 }
 
 function updateUI() {
@@ -726,13 +782,179 @@ function updateUI() {
     levelValue.textContent = currentLevel;
 }
 
-function shareScore() {
-    const text = `🐂 BLACK BULL SMASH 🐂\n\nScore: ${score.toLocaleString()}\n$ANSEM: ${tokens}\nLevel: ${currentLevel}\n\nCan you beat my score? #BlackBullSmash #ANSEM`;
-    if (navigator.share) {
-        navigator.share({ title: 'Black Bull Smash', text, url: window.location.href });
-    } else {
-        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+function updateStartScreenStats() {
+    const existing = document.querySelector('.start-stats');
+    if (existing) existing.remove();
+
+    const statsDiv = document.createElement('div');
+    statsDiv.className = 'start-stats';
+    statsDiv.innerHTML = `
+        <div class="start-stat">
+            <span class="start-stat-label">HIGH SCORE</span>
+            <span class="start-stat-value">${saveData.highScore.toLocaleString()}</span>
+        </div>
+        <div class="start-stat">
+            <span class="start-stat-label">$ANSEM TOTAL</span>
+            <span class="start-stat-value">${saveData.totalTokens.toLocaleString()}</span>
+        </div>
+        <div class="start-stat">
+            <span class="start-stat-label">MAX LEVEL</span>
+            <span class="start-stat-value">${saveData.maxLevel}</span>
+        </div>
+        <div class="start-stat">
+            <span class="start-stat-label">GAMES</span>
+            <span class="start-stat-value">${saveData.gamesPlayed}</span>
+        </div>
+    `;
+    startScreen.appendChild(statsDiv);
+}
+
+function generateShareCard(mode) {
+    const offscreen = document.getElementById('share-canvas-offscreen');
+    const sctx = offscreen.getContext('2d');
+    const W = 600;
+    const H = 400;
+    offscreen.width = W;
+    offscreen.height = H;
+
+    const grad = sctx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0, '#0a0520');
+    grad.addColorStop(0.5, '#150a30');
+    grad.addColorStop(1, '#0a0520');
+    sctx.fillStyle = grad;
+    sctx.fillRect(0, 0, W, H);
+
+    for (let i = 0; i < 20; i++) {
+        const x = Math.random() * W;
+        const y = Math.random() * H;
+        const r = Math.random() * 2;
+        sctx.fillStyle = `rgba(255, 255, 255, ${Math.random() * 0.3 + 0.1})`;
+        sctx.beginPath();
+        sctx.arc(x, y, r, 0, Math.PI * 2);
+        sctx.fill();
     }
+
+    sctx.strokeStyle = '#ff00ff33';
+    sctx.lineWidth = 2;
+    sctx.strokeRect(15, 15, W - 30, H - 30);
+
+    sctx.strokeStyle = '#00ff8833';
+    sctx.strokeRect(20, 20, W - 40, H - 40);
+
+    sctx.font = 'bold 42px Courier New';
+    sctx.textAlign = 'center';
+    sctx.fillStyle = '#ff00ff';
+    sctx.shadowColor = '#ff00ff';
+    sctx.shadowBlur = 20;
+    sctx.fillText('BLACK BULL SMASH', W / 2, 70);
+    sctx.shadowBlur = 0;
+
+    sctx.font = '14px Courier New';
+    sctx.fillStyle = '#00ff88';
+    sctx.fillText(mode === 'gameover' ? 'GAME OVER' : 'LEVEL COMPLETE', W / 2, 100);
+
+    sctx.font = 'bold 72px Courier New';
+    sctx.fillStyle = '#ffffff';
+    sctx.shadowColor = '#ff00ff';
+    sctx.shadowBlur = 30;
+    sctx.fillText(score.toLocaleString(), W / 2, 190);
+    sctx.shadowBlur = 0;
+
+    sctx.font = '13px Courier New';
+    sctx.fillStyle = '#aaa';
+    sctx.fillText('SCORE', W / 2, 145);
+
+    const leftX = W / 2 - 120;
+    const rightX = W / 2 + 120;
+    const statY = 250;
+
+    sctx.font = '11px Courier New';
+    sctx.fillStyle = '#00ff88';
+    sctx.fillText('$ANSEM COLLECTED', leftX, statY - 20);
+    sctx.font = 'bold 28px Courier New';
+    sctx.fillStyle = '#ffff00';
+    sctx.fillText(tokens.toString(), leftX, statY + 15);
+
+    sctx.font = '11px Courier New';
+    sctx.fillStyle = '#00ff88';
+    sctx.fillText('LEVEL', rightX, statY - 20);
+    sctx.font = 'bold 28px Courier New';
+    sctx.fillStyle = '#ff00ff';
+    sctx.fillText(currentLevel.toString(), rightX, statY + 15);
+
+    sctx.font = '11px Courier New';
+    sctx.fillStyle = '#555';
+    sctx.fillText('HIGH SCORE: ' + saveData.highScore.toLocaleString(), W / 2, 310);
+
+    sctx.strokeStyle = '#ffffff11';
+    sctx.lineWidth = 1;
+    sctx.beginPath();
+    sctx.moveTo(100, 335);
+    sctx.lineTo(W - 100, 335);
+    sctx.stroke();
+
+    sctx.font = '12px Courier New';
+    sctx.fillStyle = '#666';
+    sctx.fillText('trybullrush.xyz  |  #BlackBullSmash  #ANSEM', W / 2, 360);
+
+    sctx.fillStyle = '#ff00ff44';
+    for (let i = 0; i < 5; i++) {
+        const bx = 30 + Math.random() * (W - 60);
+        const by = H - 30 - Math.random() * 20;
+        sctx.fillRect(bx, by, 20 + Math.random() * 30, 3);
+    }
+
+    const displayCanvas = document.getElementById('share-canvas');
+    const dctx = displayCanvas.getContext('2d');
+    dctx.clearRect(0, 0, W, H);
+    dctx.drawImage(offscreen, 0, 0);
+}
+
+let shareCardMode = 'gameover';
+
+function openShareCard(mode) {
+    shareCardMode = mode;
+    generateShareCard(mode);
+    hideAllScreens();
+    shareCardModal.classList.add('active');
+}
+
+function closeShareCard() {
+    shareCardModal.classList.remove('active');
+    gameOverScreen.classList.add('active');
+}
+
+function downloadShareCard() {
+    const offscreen = document.getElementById('share-canvas-offscreen');
+    const link = document.createElement('a');
+    link.download = `blackbullsmash-score-${score}.png`;
+    link.href = offscreen.toDataURL('image/png');
+    link.click();
+}
+
+function tweetShareCard() {
+    const offscreen = document.getElementById('share-canvas-offscreen');
+    offscreen.toBlob((blob) => {
+        const file = new File([blob], 'blackbullsmash.png', { type: 'image/png' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({
+                title: 'Black Bull Smash',
+                text: `🐂 BLACK BULL SMASH 🐂\n\nScore: ${score.toLocaleString()}\n$ANSEM: ${tokens}\nLevel: ${currentLevel}\n\nCan you beat my score?`,
+                files: [file]
+            }).catch(() => {
+                tweetFallback();
+            });
+        } else {
+            tweetFallback();
+        }
+    }, 'image/png');
+}
+
+function tweetFallback() {
+    const text = encodeURIComponent(
+        `🐂 BLACK BULL SMASH 🐂\n\nScore: ${score.toLocaleString()}\n$ANSEM: ${tokens}\nLevel: ${currentLevel}\n\nCan you beat my score? #BlackBullSmash #ANSEM`
+    );
+    window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
 }
 
 function onAfterRender() {
@@ -1094,4 +1316,5 @@ document.addEventListener('DOMContentLoaded', () => {
     resizeCanvas();
     initEngine();
     createLevel(1);
+    updateStartScreenStats();
 });
