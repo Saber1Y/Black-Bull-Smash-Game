@@ -665,7 +665,6 @@ const LEVELS = {
 };
 
 function createLevel(level) {
-    clearLevel();
     const builder = LEVELS[level] || LEVELS[1];
     builder();
 }
