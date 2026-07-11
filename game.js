@@ -27,7 +27,7 @@ let audioCtx = null;
 let levelCompleteTimeout = null;
 
 const MAX_PULL = 150;
-const LAUNCH_FORCE = 0.2;
+const LAUNCH_FORCE = 0.14;
 const GROUND_Y_OFFSET = 60;
 
 const STORAGE_KEY = 'blackbullsmash';
