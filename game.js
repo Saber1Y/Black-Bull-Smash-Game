@@ -815,24 +815,42 @@ function drawBackground() {
 function drawSlingBase() {
     const x = slingPos.x;
     const y = slingPos.y;
+    const time = Date.now();
+    const pulse = Math.sin(time * 0.004) * 0.2 + 0.8;
+
+    const baseGlow = ctx.createRadialGradient(x, y + 15, 5, x, y + 15, 30);
+    baseGlow.addColorStop(0, `rgba(0, 255, 136, ${pulse * 0.3})`);
+    baseGlow.addColorStop(1, 'rgba(0, 255, 136, 0)');
+    ctx.fillStyle = baseGlow;
+    ctx.beginPath();
+    ctx.arc(x, y + 15, 30, 0, Math.PI * 2);
+    ctx.fill();
 
     ctx.fillStyle = '#1a1a2e';
     ctx.beginPath();
     ctx.arc(x, y + 15, 18, 0, Math.PI * 2);
     ctx.fill();
-
     ctx.strokeStyle = '#00ff88';
     ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.strokeStyle = '#00ff88';
+    ctx.lineWidth = 4;
     ctx.beginPath();
-    ctx.moveTo(x - 12, y + 15);
-    ctx.lineTo(x - 8, y - 10);
-    ctx.moveTo(x + 12, y + 15);
-    ctx.lineTo(x + 8, y - 10);
+    ctx.moveTo(x - 14, y + 18);
+    ctx.lineTo(x - 10, y - 8);
+    ctx.moveTo(x + 14, y + 18);
+    ctx.lineTo(x + 10, y - 8);
     ctx.stroke();
 
     ctx.fillStyle = '#00ff88';
     ctx.beginPath();
-    ctx.arc(x, y - 12, 6, 0, Math.PI * 2);
+    ctx.arc(x, y - 10, 7, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#050510';
+    ctx.beginPath();
+    ctx.arc(x, y - 10, 3, 0, Math.PI * 2);
     ctx.fill();
 }
 
@@ -893,6 +911,38 @@ function drawBull() {
     const x = bull.position.x;
     const y = bull.position.y;
     const angle = bull.angle;
+    const time = Date.now();
+
+    if (!bull.launched) {
+        const pulse = Math.sin(time * 0.005) * 0.3 + 0.7;
+        const glowSize = 40 + Math.sin(time * 0.003) * 8;
+
+        const glow = ctx.createRadialGradient(x, y, 10, x, y, glowSize);
+        glow.addColorStop(0, `rgba(255, 0, 255, ${pulse * 0.3})`);
+        glow.addColorStop(0.5, `rgba(0, 255, 136, ${pulse * 0.15})`);
+        glow.addColorStop(1, 'rgba(255, 0, 255, 0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(x, y, glowSize, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = `rgba(0, 255, 136, ${pulse * 0.6})`;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(x, y, 32 + Math.sin(time * 0.004) * 3, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.save();
+        ctx.font = 'bold 13px Courier New';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = `rgba(0, 255, 136, ${pulse * 0.9})`;
+        ctx.fillText('DRAG ME', x, y - 48);
+
+        ctx.font = '10px Courier New';
+        ctx.fillStyle = `rgba(255, 0, 255, ${pulse * 0.6})`;
+        ctx.fillText('\u2190 AIM & RELEASE \u2192', x, y - 62);
+        ctx.restore();
+    }
 
     ctx.save();
     ctx.translate(x, y);
