@@ -1,0 +1,231 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0a0a0f;
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+    color: #fff;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+#gameCanvas {
+    display: block;
+    background: linear-gradient(180deg, #0f0f1a 0%, #1a0a2e 50%, #0f0f1a 100%);
+}
+
+#ui-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 10;
+}
+
+#score-display {
+    display: flex;
+    gap: 30px;
+}
+
+.score-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.score-label {
+    font-size: 12px;
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88;
+}
+
+#score-value, #tokens-value, #bulls-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 20px #ff00ff;
+}
+
+#level-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.level-label {
+    font-size: 12px;
+    color: #00ff88;
+    text-shadow: 0 0 10px #00ff88;
+}
+
+#level-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffff00;
+    text-shadow: 0 0 20px #ffff00;
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 10, 15, 0.95);
+    z-index: 100;
+}
+
+.screen.active {
+    display: flex;
+}
+
+.screen h1 {
+    font-size: 64px;
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #ff00ff 0%, #00ff88 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+    filter: drop-shadow(0 0 30px rgba(255, 0, 255, 0.5));
+}
+
+.screen h2 {
+    font-size: 48px;
+    margin-bottom: 30px;
+    color: #ff00ff;
+    text-shadow: 0 0 30px #ff00ff;
+}
+
+.screen p {
+    font-size: 16px;
+    color: #aaa;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.neon-btn {
+    padding: 15px 40px;
+    font-size: 18px;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    background: transparent;
+    border: 2px solid #00ff88;
+    color: #00ff88;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    margin: 10px;
+}
+
+.neon-btn:hover {
+    background: #00ff88;
+    color: #0a0a0f;
+    box-shadow: 0 0 30px #00ff88;
+}
+
+.neon-btn.secondary {
+    border-color: #ff00ff;
+    color: #ff00ff;
+}
+
+.neon-btn.secondary:hover {
+    background: #ff00ff;
+    color: #0a0a0f;
+    box-shadow: 0 0 30px #ff00ff;
+}
+
+.controls-hint {
+    margin-top: 40px;
+    display: flex;
+    gap: 30px;
+    font-size: 12px;
+    color: #666;
+}
+
+.final-stats {
+    margin: 30px 0;
+    display: flex;
+    gap: 50px;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #00ff88;
+    margin-bottom: 10px;
+}
+
+#final-score, #final-tokens, #level-score {
+    font-size: 36px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 20px #ff00ff;
+}
+
+#pull-indicator {
+    position: absolute;
+    pointer-events: none;
+    z-index: 20;
+}
+
+#pull-line {
+    position: absolute;
+    height: 3px;
+    background: linear-gradient(90deg, #00ff88, #ff00ff);
+    transform-origin: left center;
+    box-shadow: 0 0 10px #00ff88;
+}
+
+#power-meter {
+    position: absolute;
+    width: 10px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #00ff88;
+}
+
+#power-fill {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: linear-gradient(180deg, #ff00ff, #00ff88);
+    transition: height 0.05s;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.pulse {
+    animation: pulse 1s infinite;
+}

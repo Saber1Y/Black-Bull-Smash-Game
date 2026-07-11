@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Black Bull Smash</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="ui-layer">
+            <div id="score-display">
+                <div class="score-item">
+                    <span class="score-label">SCORE</span>
+                    <span id="score-value">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="score-label">$ANSEM</span>
+                    <span id="tokens-value">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="score-label">BULLS</span>
+                    <span id="bulls-value">3</span>
+                </div>
+            </div>
+            
+            <div id="level-display">
+                <span class="level-label">LEVEL</span>
+                <span id="level-value">1</span>
+            </div>
+        </div>
+        
+        <div id="start-screen" class="screen active">
+            <h1>BLACK BULL<br>SMASH</h1>
+            <p>Launch the bull. Destroy jeets. Collect $ANSEM.</p>
+            <button id="start-btn" class="neon-btn">START SMASHING</button>
+            <div class="controls-hint">
+                <span>DRAG TO AIM</span>
+                <span>RELEASE TO LAUNCH</span>
+            </div>
+        </div>
+        
+        <div id="game-over-screen" class="screen">
+            <h2>JEETED!</h2>
+            <div class="final-stats">
+                <div class="stat">
+                    <span class="stat-label">FINAL SCORE</span>
+                    <span id="final-score">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">$ANSEM COLLECTED</span>
+                    <span id="final-tokens">0</span>
+                </div>
+            </div>
+            <button id="retry-btn" class="neon-btn">SMASH AGAIN</button>
+            <button id="share-btn" class="neon-btn secondary">SHARE SCORE</button>
+        </div>
+        
+        <div id="level-complete-screen" class="screen">
+            <h2>LEVEL COMPLETE!</h2>
+            <div class="final-stats">
+                <div class="stat">
+                    <span class="stat-label">LEVEL SCORE</span>
+                    <span id="level-score">0</span>
+                </div>
+            </div>
+            <button id="next-level-btn" class="neon-btn">NEXT LEVEL</button>
+        </div>
+        
+        <div id="pull-indicator" class="hidden">
+            <div id="pull-line"></div>
+            <div id="power-meter">
+                <div id="power-fill"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
