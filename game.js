@@ -234,10 +234,11 @@ function onPointerDown(e) {
     const y = (e.clientY || e.pageY) - rect.top;
     const bPos = bull.position;
     const dist = Math.hypot(x - bPos.x, y - bPos.y);
-    if (dist < 60) {
+    if (dist < 80) {
         isDragging = true;
         dragStart = { x: bPos.x, y: bPos.y };
         dragCurrent = { x, y };
+        Body.setStatic(bull, true);
     }
 }
 
@@ -264,6 +265,7 @@ function onPointerMove(e) {
 function onPointerUp(e) {
     if (!isDragging || !bull) return;
     isDragging = false;
+    Body.setStatic(bull, false);
     launchBull();
 }
 
