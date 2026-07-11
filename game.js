@@ -97,6 +97,7 @@ document.getElementById('level-share-btn').addEventListener('click', () => openS
 document.getElementById('download-card-btn').addEventListener('click', downloadShareCard);
 document.getElementById('tweet-card-btn').addEventListener('click', tweetShareCard);
 document.getElementById('close-share-btn').addEventListener('click', closeShareCard);
+document.getElementById('restart-btn').addEventListener('click', restartLevel);
 
 const scoreValue = document.getElementById('score-value');
 const tokensValue = document.getElementById('tokens-value');
@@ -747,6 +748,15 @@ function nextLevel() {
     clearLevel();
     createBull();
     createLevel(currentLevel);
+}
+
+function restartLevel() {
+    if (!gameStarted) return;
+    bullsRemaining = Math.max(bullsRemaining, 1);
+    clearLevel();
+    createBull();
+    createLevel(currentLevel);
+    updateUI();
 }
 
 function showGameOver() {

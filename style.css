@@ -86,6 +86,37 @@ body {
     border: 1px solid rgba(255, 0, 255, 0.2);
 }
 
+#right-ui {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.restart-btn {
+    width: 44px;
+    height: 44px;
+    background: rgba(10, 10, 20, 0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: #888;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    line-height: 1;
+    padding: 0;
+}
+
+.restart-btn:hover {
+    border-color: #ff00ff;
+    color: #ff00ff;
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+    transform: rotate(180deg);
+}
+
 .level-label {
     font-size: 10px;
     letter-spacing: 2px;
@@ -430,6 +461,12 @@ body {
     }
 
     #level-value {
+        font-size: 18px;
+    }
+
+    .restart-btn {
+        width: 36px;
+        height: 36px;
         font-size: 18px;
     }
 
