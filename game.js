@@ -322,9 +322,9 @@ function setupCollisions() {
 
             if (a.label === 'jeet' || b.label === 'jeet') {
                 const jeet = a.label === 'jeet' ? a : b;
-                if (speed > 4) {
+                if (speed > 1.5) {
                     destroyJeet(jeet, speed);
-                } else if (speed > 2) {
+                } else if (speed > 0.5) {
                     playSound('hit');
                     shakeScreen(3);
                 }
@@ -539,9 +539,9 @@ function createBlock(x, y, w, h, opts = {}) {
 
 function createJeet(x, y, opts = {}) {
     const jeet = Bodies.circle(x, y, opts.radius || 14, {
-        density: 0.003,
-        restitution: 0.3,
-        friction: 0.4,
+        density: 0.002,
+        restitution: 0.1,
+        friction: 0.5,
         label: 'jeet',
         render: {
             fillStyle: opts.color || '#ff0066',
