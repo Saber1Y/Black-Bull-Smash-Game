@@ -24,8 +24,8 @@ let slowMoTimer = null;
 let trajectoryPoints = [];
 let audioCtx = null;
 
-const MAX_PULL = 120;
-const LAUNCH_FORCE = 0.12;
+const MAX_PULL = 150;
+const LAUNCH_FORCE = 0.2;
 const GROUND_Y_OFFSET = 60;
 
 const STORAGE_KEY = 'blackbullsmash';
@@ -467,10 +467,10 @@ function triggerSlowMo(duration) {
 function createBull() {
     if (bull) Composite.remove(engine.world, bull);
     bull = Bodies.circle(slingPos.x, slingPos.y, 22, {
-        density: 0.006,
-        restitution: 0.45,
-        friction: 0.5,
-        frictionAir: 0.008,
+        density: 0.004,
+        restitution: 0.5,
+        friction: 0.3,
+        frictionAir: 0.002,
         label: 'bull',
         render: { fillStyle: '#1a1a1a' }
     });
@@ -609,12 +609,12 @@ const LEVELS = {
         createJeet(sx + 40, gy - 115);
         createJeet(sx + 120, gy - 115);
         createJeet(sx + 80, gy - 170);
-        createSniper(sx + 250, gy - 120);
+        createSniper(sx + 180, gy - 120);
 
         createToken(sx - 40, gy - 200);
         createToken(sx + 200, gy - 200);
         createToken(sx + 80, gy - 230);
-        createToken(sx + 300, gy - 60);
+        createToken(sx + 220, gy - 60);
     },
     3: () => {
         const sx = canvas.width * 0.45;
@@ -631,7 +631,7 @@ const LEVELS = {
         createBlock(sx + 60, gy - 175, 60, 15);
         createBlock(sx + 150, gy - 165, 40, 15);
 
-        createBlock(sx + 300, gy - 50, 60, 100, { color: '#2a3a2a', stroke: '#4a6a4a' });
+        createBlock(sx + 220, gy - 50, 60, 100, { color: '#2a3a2a', stroke: '#4a6a4a' });
 
         createJeet(sx + 30, gy - 115);
         createJeet(sx + 90, gy - 55);
@@ -642,8 +642,8 @@ const LEVELS = {
         createToken(sx - 50, gy - 180);
         createToken(sx + 220, gy - 180);
         createToken(sx + 90, gy - 240);
-        createToken(sx + 330, gy - 100);
-        createToken(sx + 350, gy - 160);
+        createToken(sx + 250, gy - 100);
+        createToken(sx + 270, gy - 160);
     },
     4: () => {
         const sx = canvas.width * 0.4;
@@ -661,21 +661,21 @@ const LEVELS = {
         createBlock(sx + 130, gy - 175, 80, 15);
         createBlock(sx + 130, gy - 210, 50, 15);
 
-        createBlock(sx + 380, gy - 40, 40, 80, { color: '#3a2a2a', stroke: '#6a4a4a' });
-        createBlock(sx + 380, gy - 100, 40, 40, { color: '#3a2a2a', stroke: '#6a4a4a' });
+        createBlock(sx + 300, gy - 40, 40, 80, { color: '#3a2a2a', stroke: '#6a4a4a' });
+        createBlock(sx + 300, gy - 100, 40, 40, { color: '#3a2a2a', stroke: '#6a4a4a' });
 
         for (let i = 0; i < 4; i++) {
             createJeet(sx + 30 + i * 65 + (i % 2) * 35, gy - (i % 2 === 0 ? 55 : 115));
         }
         createSniper(sx + 130, gy - 200);
-        createSniper(sx + 380, gy - 130);
-        createJeet(sx + 380, gy - 70, { color: '#cc0044' });
+        createSniper(sx + 300, gy - 130);
+        createJeet(sx + 300, gy - 70, { color: '#cc0044' });
 
         createToken(sx - 30, gy - 220);
         createToken(sx + 260, gy - 220);
         createToken(sx + 130, gy - 260);
-        createToken(sx + 420, gy - 170);
-        createToken(sx + 450, gy - 80);
+        createToken(sx + 340, gy - 170);
+        createToken(sx + 360, gy - 80);
     },
     5: () => {
         const sx = canvas.width * 0.35;
@@ -692,24 +692,24 @@ const LEVELS = {
         createBlock(sx + 150, gy - 230, 50, 15);
         createBlock(sx + 280, gy - 230, 50, 15);
 
-        createBlock(sx + 450, gy - 50, 50, 100, { color: '#2a1a2a', stroke: '#5a3a5a' });
-        createBlock(sx + 450, gy - 120, 50, 40, { color: '#2a1a2a', stroke: '#5a3a5a' });
-        createBlock(sx + 450, gy - 180, 50, 40, { color: '#2a1a2a', stroke: '#5a3a5a' });
+        createBlock(sx + 370, gy - 50, 50, 100, { color: '#2a1a2a', stroke: '#5a3a5a' });
+        createBlock(sx + 370, gy - 120, 50, 40, { color: '#2a1a2a', stroke: '#5a3a5a' });
+        createBlock(sx + 370, gy - 180, 50, 40, { color: '#2a1a2a', stroke: '#5a3a5a' });
 
         for (let col = 0; col < 4; col++) {
             createJeet(sx + col * 100 + 10, gy - 95);
         }
         createSniper(sx + 150, gy - 220);
         createSniper(sx + 280, gy - 220);
-        createSniper(sx + 450, gy - 150);
-        createJeet(sx + 450, gy - 210, { color: '#cc0044' });
-        createJeet(sx + 450, gy - 80, { color: '#cc0044' });
+        createSniper(sx + 370, gy - 150);
+        createJeet(sx + 370, gy - 210, { color: '#cc0044' });
+        createJeet(sx + 370, gy - 80, { color: '#cc0044' });
 
         createToken(sx - 20, gy - 250);
         createToken(sx + 200, gy - 270);
         createToken(sx + 350, gy - 270);
-        createToken(sx + 500, gy - 230);
-        createToken(sx + 530, gy - 100);
+        createToken(sx + 420, gy - 230);
+        createToken(sx + 440, gy - 100);
         createToken(sx + 100, gy - 300);
     }
 };
