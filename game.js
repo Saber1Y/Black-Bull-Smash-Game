@@ -589,6 +589,7 @@ const LEVELS = {
         createJeet(sx + 35, gy - 105);
         createJeet(sx + 105, gy - 55);
         createJeet(sx + 70, gy - 160);
+        createJeet(sx + 140, gy - 105);
 
         createToken(sx - 30, gy - 160);
         createToken(sx + 180, gy - 180);
@@ -609,6 +610,8 @@ const LEVELS = {
         createJeet(sx + 40, gy - 115);
         createJeet(sx + 120, gy - 115);
         createJeet(sx + 80, gy - 170);
+        createJeet(sx + 160, gy - 55);
+        createJeet(sx, gy - 55);
         createSniper(sx + 180, gy - 120);
 
         createToken(sx - 40, gy - 200);
@@ -636,8 +639,11 @@ const LEVELS = {
         createJeet(sx + 30, gy - 115);
         createJeet(sx + 90, gy - 55);
         createJeet(sx + 150, gy - 55);
+        createJeet(sx + 60, gy - 55);
+        createJeet(sx + 120, gy - 115);
         createSniper(sx + 60, gy - 200);
         createSniper(sx + 150, gy - 195);
+        createSniper(sx + 220, gy - 100);
 
         createToken(sx - 50, gy - 180);
         createToken(sx + 220, gy - 180);
@@ -664,11 +670,15 @@ const LEVELS = {
         createBlock(sx + 300, gy - 40, 40, 80, { color: '#3a2a2a', stroke: '#6a4a4a' });
         createBlock(sx + 300, gy - 100, 40, 40, { color: '#3a2a2a', stroke: '#6a4a4a' });
 
-        for (let i = 0; i < 4; i++) {
-            createJeet(sx + 30 + i * 65 + (i % 2) * 35, gy - (i % 2 === 0 ? 55 : 115));
+        for (let i = 0; i < 5; i++) {
+            createJeet(sx + 30 + i * 65, gy - 55);
+        }
+        for (let i = 0; i < 3; i++) {
+            createJeet(sx + 65 + i * 65, gy - 115);
         }
         createSniper(sx + 130, gy - 200);
         createSniper(sx + 300, gy - 130);
+        createSniper(sx + 195, gy - 160);
         createJeet(sx + 300, gy - 70, { color: '#cc0044' });
 
         createToken(sx - 30, gy - 220);
@@ -699,9 +709,15 @@ const LEVELS = {
         for (let col = 0; col < 4; col++) {
             createJeet(sx + col * 100 + 10, gy - 95);
         }
+        for (let col = 0; col < 3; col++) {
+            createJeet(sx + 50 + col * 100, gy - 155);
+        }
+        createJeet(sx + 200, gy - 55);
+        createJeet(sx + 100, gy - 55);
         createSniper(sx + 150, gy - 220);
         createSniper(sx + 280, gy - 220);
         createSniper(sx + 370, gy - 150);
+        createSniper(sx + 200, gy - 200);
         createJeet(sx + 370, gy - 210, { color: '#cc0044' });
         createJeet(sx + 370, gy - 80, { color: '#cc0044' });
 
