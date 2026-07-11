@@ -108,6 +108,7 @@ body {
     transition: all 0.2s ease;
     line-height: 1;
     padding: 0;
+    pointer-events: auto;
 }
 
 .restart-btn:hover {
