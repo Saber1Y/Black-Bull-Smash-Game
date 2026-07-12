@@ -26,7 +26,7 @@ let trajectoryPoints = [];
 let audioCtx = null;
 let levelCompleteTimeout = null;
 
-const MAX_PULL = 150;
+const MAX_PULL = window.innerWidth < 600 ? 120 : 150;
 const LAUNCH_FORCE = 0.14;
 const GROUND_Y_OFFSET = 60;
 
@@ -74,7 +74,8 @@ function updateSave(scoreVal, tokensVal, levelVal) {
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    slingPos.x = 220;
+    const isMobile = window.innerWidth < 600;
+    slingPos.x = isMobile ? 120 : 220;
     slingPos.y = canvas.height - GROUND_Y_OFFSET - 80;
 }
 resizeCanvas();
@@ -239,7 +240,9 @@ function onPointerDown(e) {
     const y = (e.clientY || e.pageY) - rect.top;
     const bPos = bull.position;
     const dist = Math.hypot(x - bPos.x, y - bPos.y);
-    if (dist < 80) {
+    const isMobile = window.innerWidth < 600;
+    const touchRadius = isMobile ? 100 : 80;
+    if (dist < touchRadius) {
         isDragging = true;
         dragStart = { x: bPos.x, y: bPos.y };
         dragCurrent = { x, y };
