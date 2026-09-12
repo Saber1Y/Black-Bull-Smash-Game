@@ -153,7 +153,7 @@ function createPanel() {
   panel.innerHTML = `
     <div class="web3-network-toggle" role="group" aria-label="Select network">
       ${NETWORKS.map(
-        (n) => `<button type="button" class="net-btn ${n.key === activeNetworkKey ? "active" : ""}" data-net="${n.key}">${n.label}</button>`
+        (n) => `<button type="button" class="net-btn ${n.key} ${n.key === activeNetworkKey ? "active" : ""}" data-net="${n.key}">${n.label}</button>`
       ).join("")}
     </div>
     <button id="web3-connect-btn" class="neon-btn web3-connect">CONNECT BOT WALLET</button>
