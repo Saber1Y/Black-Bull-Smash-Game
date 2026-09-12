@@ -474,6 +474,39 @@ body {
     margin-top: 20px;
 }
 
+.web3-network-toggle {
+    display: flex;
+    gap: 6px;
+    padding: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.web3-network-toggle .net-btn {
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.55);
+    background: transparent;
+    transition: all 0.2s ease;
+}
+
+.web3-network-toggle .net-btn:hover {
+    color: #fff;
+}
+
+.web3-network-toggle .net-btn.active {
+    color: #000;
+    background: #15dcac;
+    box-shadow: 0 0 14px rgba(21, 220, 172, 0.5);
+}
+
 .web3-connect.connected {
     border-color: #00ff88;
     box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
