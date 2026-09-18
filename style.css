@@ -482,7 +482,7 @@ body {
 .proof-footer-grid span { display: grid; gap: 4px; min-width: 0; font-size: 11px; }
 .proof-footer-grid b { color: rgba(255, 255, 255, 0.4); font-size: 9px; letter-spacing: 0.1em; }
 .proof-footer-grid code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.proof-footer a { color: #a4ef6b; font-size: 11px; letter-spacing: 0.04em; }
+.proof-footer a { color: #a4ef6b; display: block; font-size: 11px; letter-spacing: 0.04em; }
 @media (max-width: 700px) { .proof-footer-grid { grid-template-columns: 1fr; text-align: center; } }
 
 .web3-network-toggle {
